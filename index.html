@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Responsive Cart Page</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="logo">Marmeto </div>
+      <div class="nav">
+        <a href="#">Home</a>
+        <a href="#">Shop</a>
+        <a href="#">About</a>
+        <a href="#">Contact</a>
+      </div>
+      <div class="icons">
+        <span><i class="fa-solid fa-magnifying-glass"></i></span>
+        <span><i class="fa-regular fa-heart"></i></span>
+        <span><i class="fa-solid fa-cart-shopping"></i></span>
+      </div>
+    </div>
+ 
+  </header>
+
+  <div class="companylogo">
+    <h1><b>Cart</b></h1> 
+    <p>Home>cart</p>
+  </div>
+
+  <!-- Main Content -->
+  <main class="cart-page container">
+    
+    <div class="cart-grid">
+      <!-- Cart Items -->
+      <section class="cart-items">
+        <table>
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Price</th>
+              <th>Quantity</th>
+              <th>Subtotal</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="product">
+                <img src="https://cdn.shopify.com/s/files/1/0883/2188/4479/files/Asgaardsofa3.png?v=1728384481" alt="Asgaard sofa">
+                <span>Asgaard sofa</span>
+              </td>
+              <td>₹250,000.00</td>
+              <td>
+                <input type="number" value="1" min="1">
+              </td>
+              <td>₹250,000.00</td>
+              <td><button class="remove-btn">🗑️</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Cart Totals -->
+      <aside class="cart-totals">
+        <h2>Cart Totals</h2>
+        <p>Subtotal: <span>₹250,000.00</span></p>
+        <p>Total: <span class="total">₹250,000.00</span></p>
+        <button class="checkout-btn">Check Out</button>
+      </aside>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-item">
+      <i class="fa-solid fa-trophy"></i>
+      <div>
+        <h4>High Quality</h4>
+        <p>crafted from top materials</p>
+      </div>
+    </div>
+    <div class="footer-item">
+      <i class="fa-regular fa-calendar-check"></i>
+      <div>
+        <h4>Warranty Protection</h4>
+        <p>Over 2 years</p>
+      </div>
+    </div>
+    <div class="footer-item">
+      <i class="fa-solid fa-truck-fast"></i>
+      <div>
+        <h4>Free Shipping</h4>
+        <p>Order over ₹150</p>
+      </div>
+    </div>
+    <div class="footer-item">
+      <i class="fa-solid fa-headset"></i>
+      <div>
+        <h4>24/7 Support</h4>
+        <p>Dedicated support</p>
+      </div>
+    </div>
+  </footer>
+  
+
+  <script src="script.js"></script>
+
+</body>
+</html>
