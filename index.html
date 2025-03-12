@@ -1,114 +1,159 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Responsive Cart Page</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marmeto - Shopping Cart</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-  <!-- Header -->
-  <header class="header">
-    <div class="container">
-      <div class="logo">Marmeto </div>
-      <div class="nav">
-        <a href="#">Home</a>
-        <a href="#">Shop</a>
-        <a href="#">About</a>
-        <a href="#">Contact</a>
-      </div>
-      <div class="icons">
-        <span><i class="fa-solid fa-magnifying-glass"></i></span>
-        <span><i class="fa-regular fa-heart"></i></span>
-        <span><i class="fa-solid fa-cart-shopping"></i></span>
-      </div>
-    </div>
- 
-  </header>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="logo">
+            <a href="#home">
+                <span class="logo-icon">&#9651;</span>
+                <span class="logo-text">Marmeto</span>
+            </a>
+        </div>
+        <input type="checkbox" id="menu-toggle" class="menu-toggle">
+        <label for="menu-toggle" class="menu-icon">
+            <i class="fas fa-bars"></i>
+        </label>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#shop">Shop</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        <div class="nav-icons">
+            <a href="#search" class="icon-link"><i class="fas fa-search"></i></a>
+            <a href="#wishlist" class="icon-link"><i class="fas fa-heart"></i></a>
+            <a href="#cart" class="icon-link active"><i class="fas fa-shopping-cart"></i></a>
+        </div>
+    </nav>
 
-  <div class="companylogo">
-    <h1><b>Cart</b></h1> 
-    <p>Home>cart</p>
-  </div>
-
-  <!-- Main Content -->
-  <main class="cart-page container">
-    
-    <div class="cart-grid">
-      <!-- Cart Items -->
-      <section class="cart-items">
-        <table>
-          <thead>
-            <tr>
-              <th>Product</th>
-              <th>Price</th>
-              <th>Quantity</th>
-              <th>Subtotal</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="product">
-                <img src="https://cdn.shopify.com/s/files/1/0883/2188/4479/files/Asgaardsofa3.png?v=1728384481" alt="Asgaard sofa">
-                <span>Asgaard sofa</span>
-              </td>
-              <td>₹250,000.00</td>
-              <td>
-                <input type="number" value="1" min="1">
-              </td>
-              <td>₹250,000.00</td>
-              <td><button class="remove-btn">🗑️</button></td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
-
-      <!-- Cart Totals -->
-      <aside class="cart-totals">
-        <h2>Cart Totals</h2>
-        <p>Subtotal: <span>₹250,000.00</span></p>
-        <p>Total: <span class="total">₹250,000.00</span></p>
-        <button class="checkout-btn">Check Out</button>
-      </aside>
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <div class="hero-content">
+            <div class="logo-icon gold">&#9651;</div>
+            <h1>Cart</h1>
+            <div class="breadcrumb">
+                <a href="#">Home</a>
+                <span class="separator">›</span>
+                <span class="current">Cart</span>
+            </div>
+        </div>
     </div>
-  </main>
 
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="footer-item">
-      <i class="fa-solid fa-trophy"></i>
-      <div>
-        <h4>High Quality</h4>
-        <p>crafted from top materials</p>
-      </div>
-    </div>
-    <div class="footer-item">
-      <i class="fa-regular fa-calendar-check"></i>
-      <div>
-        <h4>Warranty Protection</h4>
-        <p>Over 2 years</p>
-      </div>
-    </div>
-    <div class="footer-item">
-      <i class="fa-solid fa-truck-fast"></i>
-      <div>
-        <h4>Free Shipping</h4>
-        <p>Order over ₹150</p>
-      </div>
-    </div>
-    <div class="footer-item">
-      <i class="fa-solid fa-headset"></i>
-      <div>
-        <h4>24/7 Support</h4>
-        <p>Dedicated support</p>
-      </div>
-    </div>
-  </footer>
-  
+    <!-- Cart Section -->
+    <div class="cart-container">
+        <div class="cart-content">
+          
+            <div class="cart-table-container">
+                <div class="cart-table-responsive">
+                    <table class="cart-table">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cart-items">
+                          
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
-  <script src="script.js"></script>
+            <!-- Cart Totals -->
+            <div class="cart-totals">
+                <h2>Cart Totals</h2>
+                <div class="totals-row">
+                    <span class="totals-label">Subtotal</span>
+                    <span class="totals-value subtotal-value">Rs. 0.00</span>
+                </div>
+                <div class="totals-row total">
+                    <span class="totals-label">Total</span>
+                    <span class="totals-value total-value highlight">Rs. 0.00</span>
+                </div>
+                <button class="checkout-btn">Check Out</button>
+            </div>
+        </div>
+    </div>
 
+    <!-- Benefits Section -->
+    <div class="benefits-section">
+        <div class="benefit">
+            <div class="benefit-icon trophy">
+                <i class="fas fa-trophy"></i>
+            </div>
+            <div class="benefit-content">
+                <h3>High Quality</h3>
+                <p>crafted from top materials</p>
+            </div>
+        </div>
+        <div class="benefit">
+            <div class="benefit-icon warranty">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+            <div class="benefit-content">
+                <h3>Warranty Protection</h3>
+                <p>Over 2 years</p>
+            </div>
+        </div>
+        <div class="benefit">
+            <div class="benefit-icon shipping">
+                <i class="fas fa-truck"></i>
+            </div>
+            <div class="benefit-content">
+                <h3>Free Shipping</h3>
+                <p>Order over 150 $</p>
+            </div>
+        </div>
+        <div class="benefit">
+            <div class="benefit-icon support">
+                <i class="fas fa-headset"></i>
+            </div>
+            <div class="benefit-content">
+                <h3>24 / 7 Support</h3>
+                <p>Dedicated support</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Template for cart item -->
+    <template id="cart-item-template">
+        <tr class="cart-item">
+            <td class="product-cell">
+                <div class="product-info">
+                    <img src="/placeholder.svg" alt="" class="product-image">
+                    <div class="product-details">
+                        <span class="product-name"></span>
+                        <p class="product-description"></p>
+                    </div>
+                </div>
+            </td>
+            <td class="price-cell"></td>
+            <td class="quantity-cell">
+                <div class="quantity-control">
+                    <button class="quantity-btn minus"><i class="fas fa-minus"></i></button>
+                    <input type="number" id="quantity-{unique_id}" name="quantity" value="1" min="1" class="quantity-input">
+
+                    <button class="quantity-btn plus"><i class="fas fa-plus"></i></button>
+                </div>
+            </td>
+            <td class="subtotal-cell">
+                <span class="subtotal"></span>
+                <button class="remove-btn"><i class="fas fa-trash"></i></button>
+            </td>
+        </tr>
+    </template>
+
+    <script src="script.js"></script>
 </body>
 </html>
