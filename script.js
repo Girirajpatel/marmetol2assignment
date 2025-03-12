@@ -1,100 +1,175 @@
-console.log('====================================');
-console.log("Connected");
-console.log('====================================');
+document.addEventListener('DOMContentLoaded', function() {
+  // Cart data
+  const cartData = {
+      "original_total_price": 250000,
+      "items": [
+          {
+              "id": 49839206859071,
+              "quantity": 1,
+              "title": "Asgaard sofa",
+              "price": 25000000,
+              "line_price": 25000000,
+              "final_line_price": 25000000,
+              "image": "https://cdn.shopify.com/s/files/1/0883/2188/4479/files/Asgaardsofa3.png?v=1728384481",
+              "product_description": "The Asgaard sofa offers unparalleled comfort and style with its sleek design and high-quality materials."
+          }
+      ],
+      "currency": "INR"
+  };
 
-
-
-// Fetch cart data from the API
-const fetchCartData = async () => {
-  try {
-    const response = await fetch(
-      "https://cdn.shopify.com/s/files/1/0883/2188/4479/files/apiCartData.json?v=1728384889"
-    );
-    const data = await response.json();
-    renderCartItems(data.items);
-    updateTotals(data);
-  } catch (error) {
-    console.error("Error fetching cart data:", error);
+  // Format price function
+  function formatPrice(price) {
+     
+      // Dividing by 100 to convert to rupees
+      const formattedPrice = (price / 100).toFixed(2);
+      return `Rs. ${formattedPrice}`;
   }
-};
 
-const renderCartItems = (items) => {
-  const cartItemsTable = document.querySelector(".cart-items tbody");
-  cartItemsTable.innerHTML = ""; 
+  // Render cart items
+  function renderCartItems() {
+      const cartItemsContainer = document.getElementById('cart-items');
+      const template = document.getElementById('cart-item-template');
+      
+      // Clear existing items
+      cartItemsContainer.innerHTML = '';
+      
+      if (cartData.items.length === 0) {
+          // Show empty cart message
+          const emptyRow = document.createElement('tr');
+          emptyRow.innerHTML = `
+              <td colspan="4" class="empty-cart">
+                  <div class="empty-cart-icon"><i class="fas fa-shopping-cart"></i></div>
+                  <p class="empty-cart-message">Your cart is empty</p>
+                  <a href="#home" class="continue-shopping">Continue Shopping</a>
+              </td>
+          `;
+          cartItemsContainer.appendChild(emptyRow);
+          updateCartTotals(0);
+          return;
+      }
+      
+      // Add items to cart
+      cartData.items.forEach(item => {
+          const clone = template.content.cloneNode(true);
+          
+          // Set product details
+          const productImage = clone.querySelector('.product-image');
+          productImage.src = item.image;
+          productImage.alt = item.title;
+          
+          clone.querySelector('.product-name').textContent = item.title;
+          clone.querySelector('.product-description').textContent = item.product_description;
+          
+          // Set price
+          clone.querySelector('.price-cell').textContent = formatPrice(item.price);
+          
+         
+const quantityInput = clone.querySelector('.quantity-input');
+quantityInput.value = item.quantity;
+quantityInput.dataset.id = item.id;
+quantityInput.id = `quantity-${item.id}`;  
+quantityInput.name = "quantity";  
 
-  items.forEach((item) => {
-    const row = document.createElement("tr");
-    row.setAttribute("data-id", item.id);
-    row.innerHTML = `
-      <td class="product">
-        <img src="${item.image}" alt="${item.title}">
-        <span>${item.title}</span>
-      </td>
-      <td>₹${(item.price / 100).toLocaleString()}</td>
-      <td>
-        <input type="number" value="${item.quantity}" min="1">
-      </td>
-      <td>₹${(item.price / 100).toLocaleString()}</td>  <!-- Price stays the same -->
-      <td><button class="remove-btn">🗑️</button></td>
-    `;
-
-    
-    const quantityInput = row.querySelector("input[type='number']");
-    const removeBtn = row.querySelector(".remove-btn");
-
-    quantityInput.addEventListener("change", (e) =>
-      handleQuantityChange(e, item)
-    );
-    removeBtn.addEventListener("click", () => removeCartItem(item.id));
-
-    cartItemsTable.appendChild(row);
-  });
-};
-
-
-const handleQuantityChange = (event, item) => {
-  const newQuantity = parseInt(event.target.value);
-  if (newQuantity < 1) return;
-
-  // Update price dynamically 
-  const row = document.querySelector(`[data-id="${item.id}"]`);
-  row.querySelector("td:nth-child(4)").textContent = `₹${(item.price * newQuantity / 100).toLocaleString()}`;
-
+          // Set subtotal
+          clone.querySelector('.subtotal').textContent = formatPrice(item.final_line_price);
+          
+          // Add event listeners
+          const minusBtn = clone.querySelector('.minus');
+          const plusBtn = clone.querySelector('.plus');
+          const removeBtn = clone.querySelector('.remove-btn');
+          
+          minusBtn.addEventListener('click', () => updateQuantity(item.id, -1));
+          plusBtn.addEventListener('click', () => updateQuantity(item.id, 1));
+          quantityInput.addEventListener('change', (e) => setQuantity(item.id, parseInt(e.target.value)));
+          removeBtn.addEventListener('click', () => removeItem(item.id));
+          
+          cartItemsContainer.appendChild(clone);
+      });
+      
+      // Update cart totals
+      updateCartTotals();
+  }
   
-  updateCartTotals();
-};
-
-// Remove cart item
-const removeCartItem = (itemId) => {
-  const row = document.querySelector(`[data-id="${itemId}"]`);
-  row.remove(); 
-  updateCartTotals(); 
-};
-
-// Update cart totals
-const updateCartTotals = () => {
-  const cartItems = document.querySelectorAll(".cart-items tbody tr");
-  let subtotal = 0;
-
-  cartItems.forEach((row) => {
-    const linePriceText = row.querySelector("td:nth-child(4)").textContent;
-    const linePrice = parseInt(linePriceText.replace(/₹|,/g, ""));
-    subtotal += linePrice;
+  // Update quantity
+  function updateQuantity(itemId, change) {
+      const item = cartData.items.find(item => item.id === itemId);
+      if (item) {
+          const newQuantity = item.quantity + change;
+          if (newQuantity > 0) {
+              setQuantity(itemId, newQuantity);
+          }
+      }
+  }
+  
+  // Set quantity
+  function setQuantity(itemId, quantity) {
+      const item = cartData.items.find(item => item.id === itemId);
+      if (item && quantity > 0) {
+          item.quantity = quantity;
+          item.line_price = item.price * quantity;
+          item.final_line_price = item.line_price;
+          
+          // Update UI
+          const quantityInput = document.querySelector(`.quantity-input[data-id="${itemId}"]`);
+          const subtotalElement = quantityInput.closest('tr').querySelector('.subtotal');
+          
+          quantityInput.value = quantity;
+          subtotalElement.textContent = formatPrice(item.final_line_price);
+          
+          // Update cart totals
+          updateCartTotals();
+      }
+  }
+  
+  // Remove item
+  function removeItem(itemId) {
+      const itemIndex = cartData.items.findIndex(item => item.id === itemId);
+      if (itemIndex !== -1) {
+          const itemElement = document.querySelector(`.quantity-input[data-id="${itemId}"]`).closest('tr');
+          
+          // Animate removal
+          itemElement.style.opacity = '0';
+          itemElement.style.transform = 'translateX(20px)';
+          
+          setTimeout(() => {
+              // Remove from data
+              cartData.items.splice(itemIndex, 1);
+              
+              // Re-render cart
+              renderCartItems();
+          }, 300);
+      }
+  }
+  
+  // Update cart totals
+  function updateCartTotals() {
+      let subtotal = 0;
+      
+      cartData.items.forEach(item => {
+          subtotal += item.final_line_price;
+      });
+      
+      // Update UI
+      document.querySelector('.subtotal-value').textContent = formatPrice(subtotal);
+      document.querySelector('.total-value').textContent = formatPrice(subtotal);
+  }
+  
+  // Initialize cart
+  renderCartItems();
+  
+  
+  document.querySelector('.checkout-btn').addEventListener('click', function() {
+      if (cartData.items.length > 0) {
+          alert('Proceeding to checkout!');
+        
+      } else {
+          alert('Your cart is empty. Add some products before checking out.');
+      }
   });
+  
 
-  // Update the subtotal and total dynamically
-  document.querySelector(".cart-totals p:nth-child(2) span").textContent = `₹${subtotal.toLocaleString()}`;
-  document.querySelector(".cart-totals p:nth-child(3) span.total").textContent = `₹${subtotal.toLocaleString()}`; // Total matches subtotal
-};
-
-// Update totals from the initial API data
-const updateTotals = (data) => {
-  const subtotal = data.items_subtotal_price / 100;
-  const total = data.original_total_price / 100;
-
-  document.querySelector(".cart-totals p:nth-child(2) span").textContent = `₹${subtotal.toLocaleString()}`;
-  document.querySelector(".cart-totals p:nth-child(3) span.total").textContent = `₹${subtotal.toLocaleString()}`; // Set total same as subtotal
-};
-
-// Initialize the cart page
-fetchCartData();
+  const menuToggle = document.getElementById('menu-toggle');
+  menuToggle.addEventListener('change', function() {
+      document.body.style.overflow = this.checked ? 'hidden' : '';
+  });
+});
